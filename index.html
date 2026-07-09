@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Verduurzamers — Stop met je eigen stroom duur terugkopen</title>
-<meta name="description" content="Je zonnepanelen geven hun stroom bijna gratis aan het net, en 's avonds koop je diezelfde stroom duur terug. Een thuisbatterij houdt die stroom in huis. Vraag een gratis terugbelmoment aan.">
+<meta name="description" content="Je zonnepanelen geven hun stroom bijna gratis aan het net, en 's avonds koop je diezelfde stroom duur terug. Een slimme thuisbatterij (6–30 kWh) houdt die stroom in huis. Vraag een gratis terugbelmoment aan.">
 <meta property="og:title" content="Verduurzamers — Stop met je eigen stroom duur terugkopen">
 <meta property="og:description" content="Een thuisbatterij houdt je eigen zonnestroom gewoon in huis. Verdien je hem niet terug binnen 5 jaar? Dan betalen wij het verschil.">
 <meta property="og:locale" content="nl_BE">
@@ -441,6 +441,133 @@ p{margin:0}
 .footer a:hover{text-decoration:underline}
 
 /* ==============================================================
+   HERO PHOTO — real install photo behind the form card (desktop).
+   Warm gradient fallback: if the image ever fails, the block still
+   renders as a warm panel and the layout never breaks.
+   ============================================================== */
+.hero-side{position:relative}
+.hero-photo{display:none}
+@media (min-width:960px){
+  .hero-photo{
+    display:block; position:absolute; top:-2.2rem; right:-2.6rem; z-index:0;
+    width:62%; aspect-ratio:3/4; border-radius:var(--radius); overflow:hidden;
+    transform:rotate(2.5deg);
+    background:linear-gradient(150deg, #f7b62a, #d18f00 48%, #155c3f);
+    border:5px solid rgba(255,255,255,.9);
+    box-shadow:var(--shadow-lg);
+  }
+  .hero-photo img{width:100%; height:114%; object-fit:cover; will-change:transform}
+  .hero-side .form-card{position:relative; z-index:2}
+}
+
+/* ==============================================================
+   SCROLL PROGRESS — thin gold bar, transform-only (JS-driven)
+   ============================================================== */
+.progress{
+  position:fixed; top:0; left:0; right:0; height:3px; z-index:90;
+  background:var(--gold-500); transform:scaleX(0); transform-origin:0 0;
+  pointer-events:none;
+}
+
+/* ==============================================================
+   NAV CTA — gentle pulse + periodic shine sweep
+   ============================================================== */
+.nav-cta{overflow:hidden; animation:navpulse 3.8s ease-in-out infinite}
+.nav-cta:hover{animation-play-state:paused}
+@keyframes navpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.nav-cta::before{
+  content:""; position:absolute; top:-40%; bottom:-40%; left:0; width:32%;
+  background:linear-gradient(105deg, transparent, rgba(255,255,255,.55), transparent);
+  transform:translateX(-180%) rotate(12deg); pointer-events:none;
+  animation:shine 5.5s ease-in-out infinite;
+}
+@keyframes shine{0%,58%{transform:translateX(-180%) rotate(12deg)} 76%,100%{transform:translateX(460%) rotate(12deg)}}
+
+/* ==============================================================
+   OFFER BAND — the real offer, bold gold moment above the FAQ
+   ============================================================== */
+.offer{background:var(--gold-500); color:#241a00}
+.offer-inner{
+  display:flex; flex-wrap:wrap; align-items:center; gap:1.4rem 2.5rem;
+  padding-block:clamp(2.2rem, 5vw, 3.2rem);
+}
+.offer-copy{flex:1 1 26rem}
+.offer-chip{
+  display:inline-block; font-family:"IBM Plex Mono", monospace; font-weight:600;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+  background:#241a00; color:var(--gold-400); border-radius:999px; padding:.5rem 1rem;
+  animation:breathe 4.2s ease-in-out infinite; will-change:transform;
+}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.offer h2{color:#241a00; font-size:clamp(1.55rem, 1.1rem + 2vw, 2.4rem); margin-top:.85rem; max-width:24ch}
+.offer .offer-sub{margin-top:.6rem; color:rgba(36,26,0,.75); font-size:1rem; max-width:34rem}
+.btn-dark{background:var(--green-800); color:#fff}
+.btn-dark:hover{transform:translateY(-2px); background:var(--green-700)}
+
+/* ==============================================================
+   STICKY BOTTOM BAR — appears after the hero, hides at final CTA.
+   Off-canvas by default, so the page works fine without JS.
+   ============================================================== */
+.stickybar{
+  position:fixed; left:0; right:0; bottom:0; z-index:70;
+  background:var(--green-900); color:#fff;
+  border-top:1px solid rgba(255,255,255,.16);
+  transform:translateY(110%); transition:transform .35s ease; will-change:transform;
+  padding:.65rem clamp(1rem,4vw,2rem) calc(.65rem + env(safe-area-inset-bottom));
+}
+.stickybar.show{transform:translateY(0)}
+.stickybar-inner{
+  max-width:var(--maxw); margin-inline:auto;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+}
+.sb-txt{font-size:.92rem; color:rgba(255,255,255,.88); line-height:1.35}
+.sb-txt strong{color:var(--gold-400)}
+.stickybar .btn{padding:.62rem 1.15rem; font-size:.88rem; white-space:nowrap}
+.stickybar .btn-cta::after{display:none}
+@media (max-width:480px){
+  .sb-txt{font-size:.8rem}
+  .stickybar .btn{font-size:.78rem; padding:.55rem .85rem}
+}
+
+/* ==============================================================
+   SLIDE-IN NUDGE — one-time, dismissible, desktop only
+   ============================================================== */
+.nudge{
+  position:fixed; right:1.2rem; bottom:4.9rem; z-index:75;
+  width:min(21rem, calc(100vw - 2.4rem));
+  background:var(--paper); color:var(--ink);
+  border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow-lg); padding:1.15rem 1.25rem;
+  transform:translateY(30px) translateX(115%); opacity:0;
+  transition:transform .45s ease, opacity .45s ease; will-change:transform;
+}
+.nudge.show{transform:none; opacity:1}
+.nudge h3{font-size:1.06rem; padding-right:1.2rem}
+.nudge p{margin-top:.45rem; font-size:.9rem; color:var(--ink-soft)}
+.nudge .btn{margin-top:.85rem; width:100%; padding:.7rem 1rem; font-size:.9rem}
+.nudge .btn-cta::after{display:none}
+.nudge-close{
+  position:absolute; top:.45rem; right:.55rem; background:none; border:0;
+  cursor:pointer; font-size:1.05rem; line-height:1; color:var(--muted); padding:.35rem;
+}
+.nudge-close:hover{color:var(--ink)}
+@media (max-width:759px){.nudge{display:none}}
+
+/* ==============================================================
+   GUARANTEE LIST — draw-on ticks + gentle hover lift
+   ============================================================== */
+.js .g-stack li path{stroke-dasharray:20; stroke-dashoffset:20; transition:stroke-dashoffset .6s ease .3s}
+.js .g-stack li.in path{stroke-dashoffset:0}
+.g-stack li{transition:transform .2s ease, background .2s ease}
+.g-stack li:hover{transform:translateY(-3px); background:rgba(255,255,255,.11)}
+
+/* Hover lifts must outrank the reveal's transform lock (.js .reveal.in) */
+.js .problem-card.reveal.in:hover,
+.js .benefit.reveal.in:hover,
+.js .install.reveal.in:hover{transform:translateY(-4px)}
+.js .g-stack li.reveal.in:hover{transform:translateY(-3px)}
+
+/* ==============================================================
    REVEALS — opacity/transform only, content visible without JS
    ============================================================== */
 .reveal{opacity:1; transform:none}
@@ -456,10 +583,15 @@ p{margin:0}
   .js .reveal{opacity:1; transform:none; transition:none}
   .js .u-draw path{animation:none; stroke-dashoffset:0}
   .js .check .tick{stroke-dashoffset:0; transition:none}
+  .nav-cta, .nav-cta::before, .offer-chip{animation:none}
+  .js .g-stack li path{stroke-dashoffset:0; transition:none}
 }
 </style>
 </head>
 <body>
+
+<!-- Thin gold scroll-progress bar (JS-driven; invisible without JS) -->
+<div class="progress" aria-hidden="true"></div>
 
 <!-- ============================ NAV ============================ -->
 <nav class="nav" aria-label="Hoofdnavigatie">
@@ -489,7 +621,7 @@ p{margin:0}
 
   <div class="wrap hero-inner">
     <div class="hero-copy">
-      <p class="eyebrow">Thuisbatterij · plug-and-play · 3 tot 18 kWh</p>
+      <p class="eyebrow">Slimme thuisbatterij · 6 tot 30 kWh</p>
       <h1>Stop met je eigen stroom
         <span class="u-draw">duur terugkopen<svg viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M5 13 C 58 4, 148 17, 295 7 C 236 13, 128 24, 34 20"/></svg></span>.
       </h1>
@@ -501,7 +633,11 @@ p{margin:0}
       </p>
     </div>
 
-    <!-- Callback form — the one action on this page (BRIEF §4) -->
+    <!-- Photo + callback form — the one action on this page (BRIEF §4) -->
+    <div class="hero-side">
+      <div class="hero-photo" aria-hidden="true">
+        <img src="assets/installatie-hero-berging.jpg" alt="" loading="eager" decoding="async">
+      </div>
     <div class="form-card" id="terugbelformulier">
       <h2>Wij bellen jou terug</h2>
       <p class="form-sub">Gratis en vrijblijvend. Een adviseur rekent met jóuw verbruik — geen fantasiecijfers.</p>
@@ -514,7 +650,7 @@ p{margin:0}
         </div>
         <div class="field">
           <label for="telefoon">Telefoonnummer</label>
-          <input type="tel" id="telefoon" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ ()./-]{8,}" required>
+          <input type="tel" id="telefoon" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ \(\)\.\/\-]{8,}" required>
         </div>
         <div class="field">
           <span class="field-label" style="display:block;font-weight:600;font-size:.9rem;margin-bottom:.35rem">Heb je al zonnepanelen?</span>
@@ -540,6 +676,7 @@ p{margin:0}
         <p>Een adviseur belt je op het nummer dat je doorgaf. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.</p>
       </div>
     </div>
+    </div><!-- /.hero-side -->
   </div>
 </header>
 
@@ -644,7 +781,7 @@ p{margin:0}
 <section class="numbers" aria-label="In cijfers">
   <div class="wrap numbers-row">
     <div class="stat">
-      <p class="n">3–18<sub> kWh</sub></p>
+      <p class="n">6–30<sub> kWh</sub></p>
       <p class="l">modules op maat</p>
     </div>
     <div class="stat">
@@ -718,6 +855,19 @@ p{margin:0}
   </div>
 </section>
 
+<!-- ============================ OFFER BAND ============================ -->
+<!-- The real offer (BRIEF §7) as a bold gold moment. No invented discounts. -->
+<section class="offer" id="startvoordeel" aria-label="Startvoordeel">
+  <div class="wrap offer-inner">
+    <div class="offer-copy">
+      <span class="offer-chip">Startvoordeel</span>
+      <h2>De eerste 5 kWh krijg je sowieso gratis.</h2>
+      <p class="offer-sub">Zwart op wit in je offerte — bovenop de 5-jaar terugverdiengarantie. Geen kortingscode, geen kleine lettertjes.</p>
+    </div>
+    <a class="btn btn-dark" href="#terugbelformulier-onder">Bel mij terug over mijn besparing</a>
+  </div>
+</section>
+
 <!-- ============================ FAQ ============================ -->
 <section class="section faq" id="faq">
   <div class="wrap">
@@ -733,7 +883,7 @@ p{margin:0}
       </details>
       <details class="faq-item reveal">
         <summary>Werkt dit met mijn bestaande omvormer en zonnepanelen?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <p class="faq-a">In vrijwel alle gevallen, ja. De batterij is plug-and-play en werkt naast je bestaande installatie — je panelen en omvormer blijven gewoon hangen. De adviseur checkt merk en type vooraf aan de telefoon, zodat er bij plaatsing geen verrassingen zijn.</p>
+        <p class="faq-a">In vrijwel alle gevallen, ja. De slimme thuisbatterij werkt naast je bestaande installatie — je panelen en omvormer blijven gewoon hangen. De adviseur checkt merk en type vooraf aan de telefoon, zodat er bij plaatsing geen verrassingen zijn.</p>
       </details>
       <details class="faq-item reveal">
         <summary>Wat als ik een digitale meter heb?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
@@ -741,7 +891,7 @@ p{margin:0}
       </details>
       <details class="faq-item reveal">
         <summary>Hoeveel plaats heeft zo'n batterij nodig?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <p class="faq-a">Ongeveer een halve vierkante meter muur of vloer, in de garage, berging of kelder. De modules gaan van 3 tot 18 kWh — je ziet op de foto's hierboven hoe dat er in een echte Vlaamse berging uitziet.</p>
+        <p class="faq-a">Ongeveer een halve vierkante meter muur of vloer, in de garage, berging of kelder. De modules gaan van 6 tot 30 kWh — je ziet op de foto's hierboven hoe dat er in een echte Vlaamse berging uitziet.</p>
       </details>
       <details class="faq-item reveal">
         <summary>Hoe lang duurt de installatie?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
@@ -769,7 +919,7 @@ p{margin:0}
       <p class="g-echo">Verdien je hem niet terug binnen 5 jaar? Dan betalen wij het verschil — en de eerste 5 kWh krijg je sowieso gratis.</p>
     </div>
 
-    <div class="form-card">
+    <div class="form-card" id="terugbelformulier-onder">
       <h2>Wij bellen jou terug</h2>
       <p class="form-sub">Gratis en vrijblijvend. Een adviseur rekent met jóuw verbruik — geen fantasiecijfers.</p>
 
@@ -781,7 +931,7 @@ p{margin:0}
         </div>
         <div class="field">
           <label for="telefoon2">Telefoonnummer</label>
-          <input type="tel" id="telefoon2" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ ()./-]{8,}" required>
+          <input type="tel" id="telefoon2" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ \(\)\.\/\-]{8,}" required>
         </div>
         <div class="field">
           <span class="field-label" style="display:block;font-weight:600;font-size:.9rem;margin-bottom:.35rem">Heb je al zonnepanelen?</span>
@@ -810,6 +960,24 @@ p{margin:0}
   </div>
 </section>
 
+<!-- ============================ STICKY BOOK-NOW BAR ============================ -->
+<!-- Slides in after the hero, slides away at the final CTA. Real offer, no fake scarcity (BRIEF §4.4). -->
+<div class="stickybar" aria-hidden="true">
+  <div class="stickybar-inner">
+    <p class="sb-txt"><strong>Eerste 5 kWh gratis</strong> — vrijblijvend terugbelmoment, met jóuw cijfers.</p>
+    <a class="btn btn-cta" href="#terugbelformulier-onder" tabindex="-1">Bel mij terug over mijn besparing</a>
+  </div>
+</div>
+
+<!-- ============================ ONE-TIME SLIDE-IN NUDGE ============================ -->
+<!-- Shows once after scrolling past the offer band; dismissible; desktop only. -->
+<div class="nudge" role="dialog" aria-label="Nog aan het twijfelen?" aria-hidden="true">
+  <button class="nudge-close" type="button" aria-label="Sluiten">✕</button>
+  <h3>Nog aan het twijfelen?</h3>
+  <p>Logisch — het is een serieuze investering. Daarom: de eerste 5 kWh gratis, en de terugverdiengarantie op papier.</p>
+  <a class="btn btn-cta" href="#terugbelformulier-onder">Bel mij terug over mijn besparing</a>
+</div>
+
 <!-- ============================ FOOTER ============================ -->
 <footer class="footer">
   <div class="wrap footer-inner">
@@ -834,6 +1002,73 @@ document.documentElement.classList.add('js');
     });
   }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+
+/* Scroll effects: gold progress bar + gentle hero-photo parallax.
+   Transform-only, rAF-throttled — cheap on a low-end laptop. */
+(function(){
+  var bar = document.querySelector('.progress');
+  var pimg = document.querySelector('.hero-photo img');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ticking = false;
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      var max = document.documentElement.scrollHeight - innerHeight;
+      if(bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(scrollY / max, 1) : 0) + ')';
+      if(pimg && !reduce && innerWidth >= 960){
+        pimg.style.transform = 'translateY(' + (Math.min(scrollY, 700) * -0.06) + 'px)';
+      }
+    });
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+
+/* Sticky book-now bar + one-time dismissible nudge.
+   Both live off-canvas by default, so no JS = no clutter. */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var bar = document.querySelector('.stickybar');
+  var nudge = document.querySelector('.nudge');
+  var hero = document.querySelector('.hero');
+  var finalSec = document.querySelector('.final');
+  var offer = document.querySelector('.offer');
+
+  var heroSeen = true, finalSeen = false;
+  function updateBar(){
+    if(bar) bar.classList.toggle('show', !heroSeen && !finalSeen);
+    if(finalSeen && nudge) nudge.classList.remove('show');
+  }
+  new IntersectionObserver(function(es){ heroSeen = es[0].isIntersecting; updateBar(); }, {threshold:.04}).observe(hero);
+  new IntersectionObserver(function(es){ finalSeen = es[0].isIntersecting; updateBar(); }, {threshold:.12}).observe(finalSec);
+
+  /* Nudge: once per session, after the visitor scrolls PAST the offer band */
+  var seen = false;
+  try{ seen = !!sessionStorage.getItem('vd-nudge'); }catch(e){}
+  if(nudge && offer && !seen){
+    var shown = false, wasVisible = false;
+    var io = new IntersectionObserver(function(es){
+      var e = es[es.length - 1];
+      /* only fire once the band has been seen AND then scrolled past —
+         prevents an instant popup when landing mid-page (reload/anchor) */
+      if(e.isIntersecting){ wasVisible = true; return; }
+      if(!shown && wasVisible && e.boundingClientRect.top < 0){
+        shown = true;
+        try{ sessionStorage.setItem('vd-nudge','1'); }catch(err){}
+        nudge.classList.add('show');
+        nudge.setAttribute('aria-hidden','false');
+        io.disconnect();
+      }
+    }, {threshold:0});
+    io.observe(offer);
+  }
+  if(nudge){
+    nudge.querySelector('.nudge-close').addEventListener('click', function(){ nudge.classList.remove('show'); });
+    nudge.querySelector('.btn').addEventListener('click', function(){ nudge.classList.remove('show'); });
+  }
 })();
 
 /* Callback form handling.
