@@ -173,8 +173,8 @@ p{margin:0}
 }
 .hero-copy .eyebrow{color:var(--gold-400)}
 .hero h1{
-  color:#fff; font-weight:800;
-  font-size:clamp(2.35rem, 1.4rem + 4.6vw, 4.1rem);
+  color:#fff; font-weight:800; letter-spacing:-.03em; line-height:1.02;
+  font-size:clamp(2.5rem, 1.5rem + 5vw, 4.6rem);
   margin-top:.9rem; max-width:13ch;
 }
 /* hand-drawn underline on "duur terugkopen" */
@@ -184,10 +184,10 @@ p{margin:0}
   overflow:visible; pointer-events:none;
 }
 .u-draw path{
-  fill:none; stroke:var(--gold-500); stroke-width:7; stroke-linecap:round;
-  stroke-dasharray:320; stroke-dashoffset:0;
+  fill:none; stroke:var(--gold-500); stroke-width:6.5; stroke-linecap:round;
+  stroke-dasharray:640; stroke-dashoffset:0;
 }
-.js .u-draw path{stroke-dashoffset:320; animation:drawline 1s ease .5s forwards}
+.js .u-draw path{stroke-dashoffset:640; animation:drawline 1.15s ease-out .45s forwards}
 @keyframes drawline{to{stroke-dashoffset:0}}
 
 .hero-promise{
@@ -205,7 +205,7 @@ p{margin:0}
 @media (max-width:599px){
   .hero-inner{gap:1.5rem; padding-top:1.5rem}
   .hero-copy .eyebrow{font-size:.66rem}
-  .hero h1{font-size:2.05rem; margin-top:.7rem}
+  .hero h1{font-size:2.15rem; margin-top:.7rem}
   .hero-promise{margin-top:1rem; font-size:1rem}
   .hero-figures{margin-top:1rem; row-gap:.35rem}
 }
@@ -313,6 +313,35 @@ p{margin:0}
 .js .in .check .tick{stroke-dashoffset:0}
 .benefit h3{font-size:1.16rem; margin-top:1rem}
 .benefit p{margin-top:.55rem; color:var(--ink-soft); font-size:.98rem}
+
+/* ==============================================================
+   BY THE NUMBERS — static stat band, no animation (real figures only)
+   ============================================================== */
+.numbers{background:var(--green-950); color:#fff}
+.numbers-row{
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:2rem 1.2rem; padding-block:clamp(2.4rem, 5vw, 3.6rem);
+}
+@media (min-width:760px){.numbers-row{grid-template-columns:repeat(4,1fr)}}
+.stat{text-align:center; position:relative}
+/* thin hand-set divider between stats on desktop */
+@media (min-width:760px){
+  .stat + .stat::before{
+    content:""; position:absolute; left:0; top:12%; bottom:12%;
+    width:1px; background:rgba(255,255,255,.14);
+  }
+}
+.stat .n{
+  font-family:"Bricolage Grotesque", sans-serif; font-weight:800;
+  font-size:clamp(2.3rem, 1.6rem + 2.6vw, 3.4rem); line-height:1;
+  letter-spacing:-.03em; color:var(--gold-400); white-space:nowrap;
+}
+.stat .n sub{font-size:.45em; font-weight:700; vertical-align:baseline; color:rgba(255,255,255,.85)}
+.stat .l{
+  margin-top:.55rem; font-family:"IBM Plex Mono", monospace;
+  font-size:.72rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+}
 
 /* ==============================================================
    GUARANTEE — the risk-reversal hammer (gold moment)
@@ -462,7 +491,7 @@ p{margin:0}
     <div class="hero-copy">
       <p class="eyebrow">Thuisbatterij · plug-and-play · 3 tot 18 kWh</p>
       <h1>Stop met je eigen stroom
-        <span class="u-draw">duur terugkopen<svg viewBox="0 0 300 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 15 C 60 6, 120 18, 170 11 S 268 8, 296 13"/></svg></span>.
+        <span class="u-draw">duur terugkopen<svg viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M5 13 C 58 4, 148 17, 295 7 C 236 13, 128 24, 34 20"/></svg></span>.
       </h1>
       <p class="hero-promise">Je panelen geven hun stroom bijna gratis aan het net, en 's avonds koop je diezelfde stroom duur terug. Een thuisbatterij houdt die stroom gewoon in huis.</p>
       <p class="hero-figures">
@@ -606,6 +635,29 @@ p{margin:0}
         <h3>Je koopt minder van het net.</h3>
         <p>Minder factuur, elke maand, zonder er iets voor te doen.</p>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BY THE NUMBERS ============================ -->
+<!-- Static band, no animation. Real, approved figures only (BRIEF §4.4 & §7-8) -->
+<section class="numbers" aria-label="In cijfers">
+  <div class="wrap numbers-row">
+    <div class="stat">
+      <p class="n">3–18<sub> kWh</sub></p>
+      <p class="l">modules op maat</p>
+    </div>
+    <div class="stat">
+      <p class="n">1<sub> werkdag</sub></p>
+      <p class="l">geplaatst en getest</p>
+    </div>
+    <div class="stat">
+      <p class="n">5<sub> kWh</sub></p>
+      <p class="l">gratis erbovenop</p>
+    </div>
+    <div class="stat">
+      <p class="n">10<sub> jaar</sub></p>
+      <p class="l">garantie op papier</p>
     </div>
   </div>
 </section>
