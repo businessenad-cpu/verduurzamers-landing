@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verduurzamers — Stop met je eigen stroom duur terugkopen</title>
+<meta name="description" content="Je zonnepanelen geven hun stroom bijna gratis aan het net, en 's avonds koop je diezelfde stroom duur terug. Een thuisbatterij houdt die stroom in huis. Vraag een gratis terugbelmoment aan.">
+<meta property="og:title" content="Verduurzamers — Stop met je eigen stroom duur terugkopen">
+<meta property="og:description" content="Een thuisbatterij houdt je eigen zonnestroom gewoon in huis. Verdien je hem niet terug binnen 5 jaar? Dan betalen wij het verschil.">
+<meta property="og:locale" content="nl_BE">
+
+<!-- Google Fonts — the only external resource (BRIEF §12) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ==============================================================
+   VERDUURZAMERS — thuisbatterij callback landing page
+   One action: the callback form. Everything else supports it.
+   Colours: Dennengroen #0E4B32 · Zonnegoud #F0A500 · neutrals
+   Type: Bricolage Grotesque / Instrument Sans / IBM Plex Mono
+   Motion: transforms + opacity only (BRIEF §12)
+   ============================================================== */
+
+:root{
+  --green-950:#062718;
+  --green-900:#08301f;
+  --green-800:#0b3d29;
+  --green-700:#0E4B32;   /* primary */
+  --green-600:#155c3f;
+  --green-500:#1f7a54;
+  --green-100:#dcebe2;
+  --green-50:#eef5f0;
+
+  --gold-600:#d18f00;
+  --gold-500:#F0A500;    /* accent — CTA + guarantee only */
+  --gold-400:#f7b62a;
+  --gold-50:#fdf4e0;
+
+  --ink:#152019;
+  --ink-soft:#3d4a43;
+  --muted:#67766e;
+  --line:#e3e8e4;
+  --paper:#ffffff;
+  --paper-2:#f6f8f6;
+
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow-sm:0 1px 2px rgba(8,48,31,.06), 0 2px 8px rgba(8,48,31,.05);
+  --shadow-md:0 8px 30px rgba(8,48,31,.10), 0 2px 8px rgba(8,48,31,.06);
+  --shadow-lg:0 24px 60px rgba(8,48,31,.20), 0 6px 18px rgba(8,48,31,.10);
+
+  --nav-h:62px;
+  --maxw:1120px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; scroll-padding-top:calc(var(--nav-h) + 14px)}
+body{
+  margin:0;
+  font-family:"Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+  font-size:clamp(16px, 1rem + .1vw, 17.5px);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; height:auto; display:block}
+a{color:inherit}
+h1,h2,h3{font-family:"Bricolage Grotesque", sans-serif; line-height:1.06; letter-spacing:-.02em; margin:0; color:var(--ink)}
+p{margin:0}
+:focus-visible{outline:3px solid rgba(240,165,0,.75); outline-offset:2px; border-radius:4px}
+
+.wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(1.1rem, 4vw, 2rem)}
+.section{padding-block:clamp(3.5rem, 8vw, 6rem)}
+.eyebrow{
+  font-family:"IBM Plex Mono", monospace; font-weight:600;
+  font-size:.74rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--green-500);
+}
+.section-head{max-width:44rem}
+.section-head h2{font-size:clamp(1.85rem, 1.2rem + 2.6vw, 2.9rem); font-weight:700; margin-top:.65rem}
+.section-head p{margin-top:1rem; color:var(--ink-soft); font-size:1.08rem}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
+  font-family:"Instrument Sans", sans-serif; font-weight:600; font-size:1.02rem;
+  padding:.95rem 1.55rem; border-radius:999px; border:0;
+  cursor:pointer; text-decoration:none; line-height:1.2; text-align:center;
+  transition:transform .18s ease, background .18s ease;
+  position:relative;
+}
+.btn-cta{background:var(--gold-500); color:#241a00; box-shadow:0 6px 20px rgba(240,165,0,.35)}
+.btn-cta:hover{transform:translateY(-2px); background:var(--gold-400)}
+/* Soft glow-pulse: opacity-only animation on a pseudo-element (no shadow keyframes) */
+.btn-cta::after{
+  content:""; position:absolute; inset:-3px; border-radius:inherit; z-index:-1;
+  box-shadow:0 0 26px 8px rgba(240,165,0,.45);
+  opacity:.25; animation:glow 2.6s ease-in-out infinite;
+}
+@keyframes glow{0%,100%{opacity:.18}50%{opacity:.6}}
+.btn-block{width:100%}
+.btn-sm{padding:.6rem 1.05rem; font-size:.9rem}
+
+/* ==============================================================
+   NAV — slim, sticky, CTA always pinned
+   ============================================================== */
+.nav{
+  position:sticky; top:0; z-index:60;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:saturate(140%) blur(10px);
+  -webkit-backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex; align-items:center; gap:1rem; height:var(--nav-h)}
+.brand{display:flex; align-items:center; gap:.55rem; font-family:"Bricolage Grotesque",sans-serif; font-weight:800; font-size:1.12rem; letter-spacing:-.02em; text-decoration:none; color:var(--green-700)}
+.brand svg{flex:0 0 auto}
+.nav-links{display:none; margin-left:auto; gap:1.5rem; align-items:center}
+.nav-links a{text-decoration:none; color:var(--ink-soft); font-weight:500; font-size:.95rem; transition:color .15s}
+.nav-links a:hover{color:var(--green-700)}
+.nav-cta{margin-left:auto; white-space:nowrap}
+.nav .btn-cta::after{display:none} /* keep the pulse for the hero + final CTA only */
+@media (min-width:820px){
+  .nav-links{display:flex}
+  .nav-cta{margin-left:0}
+}
+@media (max-width:420px){
+  .nav-cta{font-size:.8rem; padding:.55rem .85rem}
+}
+
+/* ==============================================================
+   HERO — mesh gradient, drifting shapes, frosted form card
+   ============================================================== */
+.hero{
+  position:relative; overflow:hidden; color:#fff;
+  /* layered mesh: static radial gradients, no animated filters */
+  background:
+    radial-gradient(52rem 34rem at 12% -6%, rgba(31,122,84,.85), transparent 62%),
+    radial-gradient(44rem 30rem at 96% 8%, rgba(240,165,0,.20), transparent 58%),
+    radial-gradient(60rem 44rem at 78% 105%, rgba(11,61,41,.95), transparent 70%),
+    linear-gradient(160deg, var(--green-800), var(--green-700) 46%, var(--green-900));
+}
+/* drifting blurred shapes — soft radial gradients moved with transforms only */
+.blob{position:absolute; border-radius:50%; pointer-events:none; will-change:transform}
+.blob-1{
+  width:46rem; height:46rem; top:-16rem; left:-12rem;
+  background:radial-gradient(closest-side, rgba(247,182,42,.28), transparent 70%);
+  animation:drift1 26s ease-in-out infinite alternate;
+}
+.blob-2{
+  width:40rem; height:40rem; bottom:-18rem; right:-10rem;
+  background:radial-gradient(closest-side, rgba(31,122,84,.55), transparent 70%);
+  animation:drift2 32s ease-in-out infinite alternate;
+}
+.blob-3{
+  width:26rem; height:26rem; top:30%; left:52%;
+  background:radial-gradient(closest-side, rgba(255,255,255,.10), transparent 70%);
+  animation:drift3 22s ease-in-out infinite alternate;
+}
+@keyframes drift1{from{transform:translate(0,0)} to{transform:translate(5rem,3rem)}}
+@keyframes drift2{from{transform:translate(0,0)} to{transform:translate(-4rem,-4rem)}}
+@keyframes drift3{from{transform:translate(0,0) scale(1)} to{transform:translate(-3rem,2.5rem) scale(1.12)}}
+
+.hero-inner{
+  position:relative; z-index:1;
+  display:grid; gap:clamp(2.2rem, 5vw, 3.5rem);
+  padding-block:clamp(2.2rem, 4vw, 3.4rem);
+}
+@media (min-width:960px){
+  .hero-inner{grid-template-columns:1.15fr .85fr; align-items:center}
+}
+.hero-copy .eyebrow{color:var(--gold-400)}
+.hero h1{
+  color:#fff; font-weight:800;
+  font-size:clamp(2.35rem, 1.4rem + 4.6vw, 4.1rem);
+  margin-top:.9rem; max-width:13ch;
+}
+/* hand-drawn underline on "duur terugkopen" */
+.u-draw{position:relative; display:inline-block; white-space:nowrap}
+.u-draw svg{
+  position:absolute; left:-2%; bottom:-.14em; width:104%; height:.36em;
+  overflow:visible; pointer-events:none;
+}
+.u-draw path{
+  fill:none; stroke:var(--gold-500); stroke-width:7; stroke-linecap:round;
+  stroke-dasharray:320; stroke-dashoffset:0;
+}
+.js .u-draw path{stroke-dashoffset:320; animation:drawline 1s ease .5s forwards}
+@keyframes drawline{to{stroke-dashoffset:0}}
+
+.hero-promise{
+  margin-top:1.4rem; font-size:clamp(1.05rem, 1rem + .4vw, 1.22rem);
+  color:rgba(255,255,255,.88); max-width:36rem; line-height:1.65;
+}
+.hero-figures{
+  margin-top:1.6rem; display:flex; flex-wrap:wrap; gap:.6rem 1.6rem;
+  font-family:"IBM Plex Mono", monospace; font-size:.82rem; font-weight:500;
+  color:rgba(255,255,255,.75);
+}
+.hero-figures strong{color:var(--gold-400); font-weight:600}
+
+/* mobile: pull the form as close to the fold as the required copy allows */
+@media (max-width:599px){
+  .hero-inner{gap:1.5rem; padding-top:1.5rem}
+  .hero-copy .eyebrow{font-size:.66rem}
+  .hero h1{font-size:2.05rem; margin-top:.7rem}
+  .hero-promise{margin-top:1rem; font-size:1rem}
+  .hero-figures{margin-top:1rem; row-gap:.35rem}
+}
+
+/* Frosted-glass form card */
+.form-card{
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(14px) saturate(130%);
+  -webkit-backdrop-filter:blur(14px) saturate(130%);
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);
+  padding:clamp(1.3rem, 2.4vw, 1.6rem);
+  color:var(--ink);
+}
+.form-card h2{font-size:1.32rem; font-weight:700}
+.form-card .form-sub{margin-top:.45rem; color:var(--ink-soft); font-size:.96rem}
+.cb-form{margin-top:1.1rem; display:grid; gap:.8rem}
+.field label{display:block; font-weight:600; font-size:.9rem; margin-bottom:.35rem}
+.field input[type="text"],
+.field input[type="tel"]{
+  width:100%; padding:.7rem .95rem; font:inherit; color:var(--ink);
+  background:#fff; border:1px solid #cfd8d2; border-radius:var(--radius-sm);
+  transition:border-color .15s;
+}
+.field input:focus{border-color:var(--green-500); outline:none; box-shadow:0 0 0 3px rgba(31,122,84,.18)}
+.radio-row{display:flex; gap:.6rem}
+.radio-pill{flex:1; position:relative}
+.radio-pill input{position:absolute; opacity:0; inset:0; cursor:pointer}
+.radio-pill span{
+  display:flex; align-items:center; justify-content:center; gap:.4rem;
+  padding:.72rem .5rem; border:1px solid #cfd8d2; border-radius:999px;
+  font-weight:600; font-size:.95rem; background:#fff;
+  transition:background .15s, border-color .15s, color .15s;
+}
+.radio-pill input:checked + span{background:var(--green-700); border-color:var(--green-700); color:#fff}
+.radio-pill input:focus-visible + span{outline:3px solid rgba(240,165,0,.75); outline-offset:2px}
+.form-note{font-size:.83rem; color:var(--muted); text-align:center}
+.form-success{
+  display:none; text-align:center; padding:2rem .5rem;
+}
+.form-success svg{margin-inline:auto; margin-bottom:1rem}
+.form-success h3{font-size:1.3rem}
+.form-success p{margin-top:.6rem; color:var(--ink-soft)}
+.form-card.is-sent .cb-form,
+.form-card.is-sent .form-sub{display:none}
+.form-card.is-sent .form-success{display:block}
+
+/* ==============================================================
+   HERKENBAAR — the problem, mirrored back
+   ============================================================== */
+.problem{background:var(--paper-2)}
+.problem-grid{display:grid; gap:1.1rem; margin-top:clamp(1.8rem,4vw,2.6rem)}
+@media (min-width:820px){.problem-grid{grid-template-columns:repeat(3,1fr)}}
+.problem-card{
+  background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+  padding:1.6rem; box-shadow:var(--shadow-sm);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.problem-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-md)}
+.problem-card .num{
+  font-family:"IBM Plex Mono", monospace; font-weight:600; font-size:1.7rem;
+  color:var(--green-700); letter-spacing:-.02em;
+}
+.problem-card .num small{font-size:.78rem; color:var(--muted); font-weight:500; letter-spacing:0}
+.problem-card h3{font-size:1.14rem; margin-top:.7rem}
+.problem-card p{margin-top:.55rem; color:var(--ink-soft); font-size:.97rem}
+.problem-punch{
+  margin-top:clamp(1.8rem,4vw,2.4rem); max-width:44rem;
+  font-family:"Bricolage Grotesque", sans-serif; font-weight:700;
+  font-size:clamp(1.25rem, 1rem + 1.2vw, 1.65rem); line-height:1.3; color:var(--green-700);
+}
+
+/* ==============================================================
+   TRUST BADGES
+   ============================================================== */
+.badges{border-block:1px solid var(--line); background:var(--paper)}
+.badges-row{
+  display:grid; gap:1.4rem; padding-block:clamp(1.8rem,4vw,2.4rem);
+}
+@media (min-width:700px){.badges-row{grid-template-columns:repeat(3,1fr)}}
+.badge{display:flex; align-items:center; gap:.9rem}
+.badge svg{flex:0 0 auto}
+.badge strong{display:block; font-size:1.02rem}
+.badge span{display:block; color:var(--muted); font-size:.88rem}
+
+/* ==============================================================
+   BENEFITS — outcomes with draw-on checkmarks
+   ============================================================== */
+.benefits-grid{display:grid; gap:1.1rem; margin-top:clamp(1.8rem,4vw,2.6rem)}
+@media (min-width:820px){.benefits-grid{grid-template-columns:repeat(3,1fr)}}
+.benefit{
+  border:1px solid var(--line); border-radius:var(--radius); padding:1.7rem;
+  background:var(--paper); box-shadow:var(--shadow-sm);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.benefit:hover{transform:translateY(-4px); box-shadow:var(--shadow-md)}
+.check{width:46px; height:46px}
+.check .ring{fill:var(--green-50); stroke:var(--green-100); stroke-width:1.5}
+.check .tick{
+  fill:none; stroke:var(--green-600); stroke-width:3.4; stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:30; stroke-dashoffset:0;
+}
+.js .check .tick{stroke-dashoffset:30; transition:stroke-dashoffset .7s ease .25s}
+.js .in .check .tick{stroke-dashoffset:0}
+.benefit h3{font-size:1.16rem; margin-top:1rem}
+.benefit p{margin-top:.55rem; color:var(--ink-soft); font-size:.98rem}
+
+/* ==============================================================
+   GUARANTEE — the risk-reversal hammer (gold moment)
+   ============================================================== */
+.guarantee{background:var(--green-800); color:#fff; position:relative; overflow:hidden}
+.guarantee::before{
+  content:""; position:absolute; width:38rem; height:38rem; border-radius:50%;
+  top:-16rem; right:-12rem; pointer-events:none;
+  background:radial-gradient(closest-side, rgba(240,165,0,.16), transparent 70%);
+}
+.guarantee .wrap{position:relative}
+.guarantee .eyebrow{color:var(--gold-400)}
+.guarantee h2{color:#fff; font-size:clamp(1.7rem, 1.1rem + 2.6vw, 2.7rem); margin-top:.65rem; max-width:24ch}
+.g-line{
+  margin-top:1.4rem; max-width:38rem;
+  font-family:"Bricolage Grotesque", sans-serif; font-weight:700;
+  font-size:clamp(1.25rem, 1rem + 1.4vw, 1.8rem); line-height:1.35;
+  color:var(--gold-400);
+}
+.g-stack{
+  margin:clamp(1.8rem,4vw,2.4rem) 0 0; padding:0; list-style:none;
+  display:grid; gap:.9rem;
+}
+@media (min-width:760px){.g-stack{grid-template-columns:repeat(2,1fr)}}
+.g-stack li{
+  display:flex; gap:.85rem; align-items:flex-start;
+  background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-sm); padding:1rem 1.1rem;
+}
+.g-stack svg{flex:0 0 auto; margin-top:.15rem}
+.g-stack strong{display:block; font-size:1rem}
+.g-stack span{display:block; color:rgba(255,255,255,.72); font-size:.88rem; margin-top:.15rem}
+
+/* ==============================================================
+   REAL INSTALLATIONS
+   ============================================================== */
+.installs-grid{display:grid; gap:1.1rem; margin-top:clamp(1.8rem,4vw,2.6rem)}
+@media (min-width:760px){.installs-grid{grid-template-columns:repeat(3,1fr)}}
+.install{
+  border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);
+  background:var(--paper); box-shadow:var(--shadow-sm);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.install:hover{transform:translateY(-4px); box-shadow:var(--shadow-md)}
+.install img{aspect-ratio:3/4; object-fit:cover; width:100%}
+.install figcaption{
+  padding:.85rem 1rem; font-family:"IBM Plex Mono", monospace;
+  font-size:.76rem; font-weight:500; color:var(--muted); letter-spacing:.02em;
+}
+
+/* ==============================================================
+   FAQ
+   ============================================================== */
+.faq{background:var(--paper-2)}
+.faq-list{margin-top:clamp(1.6rem,4vw,2.2rem); max-width:52rem; display:grid; gap:.7rem}
+.faq-item{
+  background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-sm);
+}
+.faq-item summary{
+  cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+  padding:1.05rem 1.2rem; font-weight:600; font-size:1.02rem;
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary .chev{flex:0 0 auto; transition:transform .2s ease}
+.faq-item[open] summary .chev{transform:rotate(180deg)}
+.faq-item .faq-a{padding:0 1.2rem 1.15rem; color:var(--ink-soft); font-size:.97rem; max-width:44rem}
+
+/* ==============================================================
+   FINAL CTA
+   ============================================================== */
+.final{
+  color:#fff; position:relative; overflow:hidden;
+  background:
+    radial-gradient(48rem 32rem at 88% -10%, rgba(240,165,0,.16), transparent 60%),
+    radial-gradient(52rem 36rem at 0% 110%, rgba(31,122,84,.7), transparent 66%),
+    linear-gradient(150deg, var(--green-800), var(--green-900));
+}
+.final-inner{
+  position:relative; z-index:1; display:grid; gap:clamp(2rem,5vw,3.2rem);
+  padding-block:clamp(3.2rem, 7vw, 5.5rem);
+}
+@media (min-width:960px){.final-inner{grid-template-columns:1.05fr .95fr; align-items:center}}
+.final h2{color:#fff; font-size:clamp(1.9rem, 1.2rem + 2.8vw, 3rem); max-width:18ch}
+.final .form-card h2{color:var(--ink); font-size:1.32rem; max-width:none}
+.final .final-sub{margin-top:1.1rem; color:rgba(255,255,255,.85); max-width:32rem; font-size:1.06rem}
+.final .g-echo{
+  margin-top:1.4rem; font-family:"Bricolage Grotesque",sans-serif; font-weight:700;
+  color:var(--gold-400); font-size:1.15rem; line-height:1.4; max-width:30rem;
+}
+
+/* ==============================================================
+   FOOTER
+   ============================================================== */
+.footer{background:var(--green-950); color:rgba(255,255,255,.6); font-size:.86rem}
+.footer-inner{display:flex; flex-wrap:wrap; gap:.6rem 1.6rem; justify-content:space-between; padding-block:1.6rem}
+.footer a{color:rgba(255,255,255,.8); text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+/* ==============================================================
+   REVEALS — opacity/transform only, content visible without JS
+   ============================================================== */
+.reveal{opacity:1; transform:none}
+.js .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease}
+.js .reveal.in{opacity:1; transform:none}
+.js .reveal.d1{transition-delay:.08s}
+.js .reveal.d2{transition-delay:.16s}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .blob{animation:none}
+  .btn-cta::after{animation:none; opacity:.3}
+  .js .reveal{opacity:1; transform:none; transition:none}
+  .js .u-draw path{animation:none; stroke-dashoffset:0}
+  .js .check .tick{stroke-dashoffset:0; transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ NAV ============================ -->
+<nav class="nav" aria-label="Hoofdnavigatie">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="Verduurzamers — naar boven">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="3" y="6" width="16" height="14" rx="3" fill="#0E4B32"/>
+        <rect x="19" y="10" width="3" height="6" rx="1.5" fill="#0E4B32"/>
+        <path d="M12.2 8.5 8.8 13.6h2.6l-1.4 3.9 4.2-5.3h-2.7l1.9-3.7h-1.2z" fill="#F0A500"/>
+      </svg>
+      Verduurzamers
+    </a>
+    <div class="nav-links">
+      <a href="#herkenbaar">herkenbaar?</a>
+      <a href="#voordelen">voordelen</a>
+      <a href="#faq">faq</a>
+    </div>
+    <a class="btn btn-cta btn-sm nav-cta" href="#terugbelformulier">Bel mij terug over mijn besparing</a>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero" id="top">
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3" aria-hidden="true"></div>
+
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">Thuisbatterij · plug-and-play · 3 tot 18 kWh</p>
+      <h1>Stop met je eigen stroom
+        <span class="u-draw">duur terugkopen<svg viewBox="0 0 300 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 15 C 60 6, 120 18, 170 11 S 268 8, 296 13"/></svg></span>.
+      </h1>
+      <p class="hero-promise">Je panelen geven hun stroom bijna gratis aan het net, en 's avonds koop je diezelfde stroom duur terug. Een thuisbatterij houdt die stroom gewoon in huis.</p>
+      <p class="hero-figures">
+        <span>injectie <strong>±4 cent</strong>/kWh</span>
+        <span>terugkopen <strong>±30 cent</strong>/kWh</span>
+        <span>garantie <strong>10 jaar</strong></span>
+      </p>
+    </div>
+
+    <!-- Callback form — the one action on this page (BRIEF §4) -->
+    <div class="form-card" id="terugbelformulier">
+      <h2>Wij bellen jou terug</h2>
+      <p class="form-sub">Gratis en vrijblijvend. Een adviseur rekent met jóuw verbruik — geen fantasiecijfers.</p>
+
+      <!-- TODO: wire to GHL — POST these fields to the GoHighLevel webhook URL (BRIEF §9B) -->
+      <form class="cb-form" method="post" novalidate>
+        <div class="field">
+          <label for="naam">Naam</label>
+          <input type="text" id="naam" name="naam" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="telefoon">Telefoonnummer</label>
+          <input type="tel" id="telefoon" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ ()./-]{8,}" required>
+        </div>
+        <div class="field">
+          <span class="field-label" style="display:block;font-weight:600;font-size:.9rem;margin-bottom:.35rem">Heb je al zonnepanelen?</span>
+          <div class="radio-row" role="radiogroup" aria-label="Heb je al zonnepanelen?">
+            <label class="radio-pill"><input type="radio" name="zonnepanelen" value="ja" required><span>Ja</span></label>
+            <label class="radio-pill"><input type="radio" name="zonnepanelen" value="nee"><span>Nee</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="postcode">Postcode</label>
+          <input type="text" id="postcode" name="postcode" autocomplete="postal-code" inputmode="numeric" pattern="[1-9][0-9]{3}" maxlength="4" required>
+        </div>
+        <button type="submit" class="btn btn-cta btn-block">Bel mij terug over mijn besparing</button>
+        <p class="form-note">Geen verkooppraatje aan de deur. Eén telefoontje, met cijfers.</p>
+      </form>
+
+      <div class="form-success" role="status">
+        <svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+          <circle cx="26" cy="26" r="24" fill="#eef5f0" stroke="#dcebe2" stroke-width="2"/>
+          <path d="M16 27l7 7 13-15" fill="none" stroke="#155c3f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>Goed genoteerd.</h3>
+        <p>Een adviseur belt je op het nummer dat je doorgaf. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ HERKENBAAR ============================ -->
+<section class="section problem" id="herkenbaar">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Herkenbaar?</p>
+      <h2>Je hebt geïnvesteerd in zonnepanelen. En toch klopt je factuur niet.</h2>
+      <p>Niet omdat je panelen slecht werken. Omdat de regels veranderd zijn nadat jij tekende.</p>
+    </div>
+
+    <div class="problem-grid">
+      <article class="problem-card reveal">
+        <p class="num">±4 <small>cent/kWh</small></p>
+        <h3>De injectievergoeding is gekelderd</h3>
+        <p>Wat je panelen overdag op het net zetten, brengt nog ongeveer 4 cent per kWh op. 's Avonds koop je diezelfde stroom terug aan zo'n 30 cent. Zeven keer duurder.</p>
+      </article>
+      <article class="problem-card reveal d1">
+        <p class="num">3,5 <small>kW piek</small></p>
+        <h3>Het capaciteitstarief straft elke piek</h3>
+        <p>Eén kwartier onoplettend koken en je maandpiek staat vast. Een maand braaf onder de 3,5 kW blijven wordt in 15 minuten uitgewist — en jij betaalt ervoor.</p>
+      </article>
+      <article class="problem-card reveal d2">
+        <p class="num">0 <small>&euro; voordeel</small></p>
+        <h3>De terugdraaiende teller is weg</h3>
+        <p>Vroeger telde elke opgewekte kWh volwaardig mee. Met de digitale meter telt alleen nog wat je op hetzelfde moment zelf verbruikt. Net dan ben je niet thuis.</p>
+      </article>
+    </div>
+
+    <p class="problem-punch reveal">Je panelen schenken hun stroom bijna gratis weg — en jij huurt hem 's avonds terug. Een thuisbatterij sluit die lus.</p>
+  </div>
+</section>
+
+<!-- ============================ TRUST BADGES ============================ -->
+<section class="badges" aria-label="Zekerheden">
+  <div class="wrap badges-row">
+    <div class="badge reveal">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <path d="M20 4l12 5v9c0 8-5.2 14.4-12 17-6.8-2.6-12-9-12-17V9l12-5z" fill="#eef5f0" stroke="#0E4B32" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M14 20.5l4 4 8-9" stroke="#0E4B32" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div><strong>10 jaar garantie</strong><span>op de batterij, op papier</span></div>
+    </div>
+    <div class="badge reveal d1">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="16" fill="#fdf4e0" stroke="#d18f00" stroke-width="2"/>
+        <text x="20" y="26" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#d18f00">6%</text>
+      </svg>
+      <div><strong>6% btw</strong><span>voor woningen die in aanmerking komen</span></div>
+    </div>
+    <div class="badge reveal d2">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="6" y="10" width="28" height="22" rx="4" fill="#eef5f0" stroke="#0E4B32" stroke-width="2"/>
+        <path d="M14 10V7a6 6 0 0112 0v3" stroke="#0E4B32" stroke-width="2" fill="none"/>
+        <path d="M15 21l3.5 3.5L26 17" stroke="#0E4B32" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div><strong>Erkend installateur</strong><span>eigen techniekers, geen onderaannemers-loterij</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BENEFITS ============================ -->
+<section class="section" id="voordelen">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Wat verandert er</p>
+      <h2>Drie dingen die je vanaf dag één merkt</h2>
+    </div>
+
+    <div class="benefits-grid">
+      <article class="benefit reveal">
+        <svg class="check" viewBox="0 0 46 46" aria-hidden="true">
+          <circle class="ring" cx="23" cy="23" r="21"/>
+          <path class="tick" d="M14 24l6.5 6.5L32 16"/>
+        </svg>
+        <h3>Je zonnestroom blijft van jou.</h3>
+        <p>Wat je overdag opwekt, gebruik je 's avonds — niet het net.</p>
+      </article>
+      <article class="benefit reveal d1">
+        <svg class="check" viewBox="0 0 46 46" aria-hidden="true">
+          <circle class="ring" cx="23" cy="23" r="21"/>
+          <path class="tick" d="M14 24l6.5 6.5L32 16"/>
+        </svg>
+        <h3>Het capaciteitstarief bijt minder hard.</h3>
+        <p>Je batterij vangt de pieken op, jij betaalt er niet voor.</p>
+      </article>
+      <article class="benefit reveal d2">
+        <svg class="check" viewBox="0 0 46 46" aria-hidden="true">
+          <circle class="ring" cx="23" cy="23" r="21"/>
+          <path class="tick" d="M14 24l6.5 6.5L32 16"/>
+        </svg>
+        <h3>Je koopt minder van het net.</h3>
+        <p>Minder factuur, elke maand, zonder er iets voor te doen.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ GUARANTEE ============================ -->
+<section class="section guarantee" aria-label="Garanties">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Zwart op wit</p>
+      <h2>"En als ik hem nooit terugverdien?"</h2>
+    </div>
+    <p class="g-line reveal">Verdien je hem niet terug binnen 5 jaar? Dan betalen wij het verschil — en de eerste 5 kWh krijg je sowieso gratis.</p>
+
+    <ul class="g-stack">
+      <li class="reveal">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="rgba(240,165,0,.18)"/><path d="M6.5 11.5l3 3 6-7" stroke="#F0A500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><strong>Gratis 5 kWh batterij-garantie</strong><span>De eerste 5 kWh capaciteit krijg je van ons.</span></div>
+      </li>
+      <li class="reveal d1">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="rgba(240,165,0,.18)"/><path d="M6.5 11.5l3 3 6-7" stroke="#F0A500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><strong>5 jaar terugverdiengarantie</strong><span>Niet terugverdiend binnen 5 jaar? Wij betalen het verschil.</span></div>
+      </li>
+      <li class="reveal">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="rgba(240,165,0,.18)"/><path d="M6.5 11.5l3 3 6-7" stroke="#F0A500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><strong>10 jaar garantie op de batterij</strong><span>Contractueel. Niet "gemiddelde levensduur".</span></div>
+      </li>
+      <li class="reveal d1">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="rgba(240,165,0,.18)"/><path d="M6.5 11.5l3 3 6-7" stroke="#F0A500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><strong>6% btw</strong><span>Voor woningen die in aanmerking komen. De adviseur bevestigt dit vooraf.</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================ REAL INSTALLATIONS ============================ -->
+<section class="section" aria-label="Echte installaties">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Geen studiofoto's</p>
+      <h2>Zo staat het er bij klanten écht bij</h2>
+      <p>Drie recente plaatsingen in Vlaamse bergingen en garages. Gewoon gefotografeerd zoals het hangt.</p>
+    </div>
+
+    <div class="installs-grid">
+      <figure class="install reveal">
+        <img src="assets/installatie-dyness-berging.jpg" alt="Solis omvormer boven twee Dyness batterijmodules in een Vlaamse berging" loading="lazy" width="960" height="1280">
+        <figcaption>Solis omvormer + 2x Dyness — berging</figcaption>
+      </figure>
+      <figure class="install reveal d1">
+        <img src="assets/installatie-pylontech-garage.jpg" alt="Solis omvormer op een gestapelde Pylontech batterijtoren tegen een bakstenen muur in een garage" loading="lazy" width="960" height="1280">
+        <figcaption>Solis omvormer + Pylontech-toren — garage</figcaption>
+      </figure>
+      <figure class="install reveal d2">
+        <img src="assets/installatie-volledig-meterkast.jpg" alt="Volledige installatie met Solis omvormer, digitale meter, zekeringkast en twee Dyness batterijmodules aan de muur" loading="lazy" width="960" height="1280">
+        <figcaption>Volledige installatie + digitale meter</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FAQ ============================ -->
+<section class="section faq" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Eerlijke antwoorden</p>
+      <h2>De vragen die je je nu stelt</h2>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item reveal">
+        <summary>Verdien ik een thuisbatterij wel terug?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <p class="faq-a">Dat hangt af van je verbruik, je injectie en je piek — niet van een mooie brochure. Daarom rekenen we het uit met jóuw cijfers, niet met een gemiddelde. En daarom staat de garantie op papier: verdien je hem niet terug binnen 5 jaar, dan betalen wij het verschil. Wij dragen dat risico, niet jij.</p>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Werkt dit met mijn bestaande omvormer en zonnepanelen?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <p class="faq-a">In vrijwel alle gevallen, ja. De batterij is plug-and-play en werkt naast je bestaande installatie — je panelen en omvormer blijven gewoon hangen. De adviseur checkt merk en type vooraf aan de telefoon, zodat er bij plaatsing geen verrassingen zijn.</p>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Wat als ik een digitale meter heb?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <p class="faq-a">Dan ben je precies de persoon voor wie dit bestaat. De digitale meter is de reden dat je injectie bijna niets opbrengt en je piek afgerekend wordt. Een batterij draait dat om: minder injectie aan 4 cent, minder afname aan 30 cent, en een afgetopte piek.</p>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Hoeveel plaats heeft zo'n batterij nodig?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <p class="faq-a">Ongeveer een halve vierkante meter muur of vloer, in de garage, berging of kelder. De modules gaan van 3 tot 18 kWh — je ziet op de foto's hierboven hoe dat er in een echte Vlaamse berging uitziet.</p>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Hoe lang duurt de installatie?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <p class="faq-a">Eén werkdag, meestal minder. Onze techniekers hangen de batterij, koppelen ze aan je omvormer en meter, en testen alles voor ze vertrekken. Je zit die avond al op je eigen zonnestroom.</p>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Wat gebeurt er bij stroomuitval?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <p class="faq-a">Standaard schakelt de installatie zich uit bij een stroompanne — dat is wettelijk verplicht, ter bescherming van wie aan het net werkt. Wil je noodstroom voor bijvoorbeeld je diepvries of internet, dan bestaat daar een back-upoptie voor. Zeg het tegen de adviseur, die rekent het mee.</p>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Betaal ik 6% of 21% btw?<svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="#0E4B32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <p class="faq-a">Is je woning ouder dan 10 jaar en wordt de batterij door een erkend installateur geplaatst, dan geldt in de regel het verlaagde tarief van 6%. Anders is het 21%. De adviseur bevestigt vooraf welk tarief voor jouw woning geldt — geen verrassing op de factuur.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FINAL CTA ============================ -->
+<section class="final" aria-label="Vraag je terugbelmoment aan">
+  <div class="wrap final-inner">
+    <div>
+      <p class="eyebrow" style="color:var(--gold-400)">Eén telefoontje</p>
+      <h2>Weet binnen één gesprek wat jouw dak écht kan besparen</h2>
+      <p class="final-sub">Laat je nummer achter. Een adviseur belt je, rekent met je eigen verbruik en zegt ook eerlijk wanneer een batterij níet interessant is.</p>
+      <p class="g-echo">Verdien je hem niet terug binnen 5 jaar? Dan betalen wij het verschil — en de eerste 5 kWh krijg je sowieso gratis.</p>
+    </div>
+
+    <div class="form-card">
+      <h2>Wij bellen jou terug</h2>
+      <p class="form-sub">Gratis en vrijblijvend. Een adviseur rekent met jóuw verbruik — geen fantasiecijfers.</p>
+
+      <!-- TODO: wire to GHL — POST these fields to the GoHighLevel webhook URL (BRIEF §9B) -->
+      <form class="cb-form" method="post" novalidate>
+        <div class="field">
+          <label for="naam2">Naam</label>
+          <input type="text" id="naam2" name="naam" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="telefoon2">Telefoonnummer</label>
+          <input type="tel" id="telefoon2" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ ()./-]{8,}" required>
+        </div>
+        <div class="field">
+          <span class="field-label" style="display:block;font-weight:600;font-size:.9rem;margin-bottom:.35rem">Heb je al zonnepanelen?</span>
+          <div class="radio-row" role="radiogroup" aria-label="Heb je al zonnepanelen?">
+            <label class="radio-pill"><input type="radio" name="zonnepanelen" value="ja" required><span>Ja</span></label>
+            <label class="radio-pill"><input type="radio" name="zonnepanelen" value="nee"><span>Nee</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="postcode2">Postcode</label>
+          <input type="text" id="postcode2" name="postcode" autocomplete="postal-code" inputmode="numeric" pattern="[1-9][0-9]{3}" maxlength="4" required>
+        </div>
+        <button type="submit" class="btn btn-cta btn-block">Bel mij terug over mijn besparing</button>
+        <p class="form-note">Geen verkooppraatje aan de deur. Eén telefoontje, met cijfers.</p>
+      </form>
+
+      <div class="form-success" role="status">
+        <svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+          <circle cx="26" cy="26" r="24" fill="#eef5f0" stroke="#dcebe2" stroke-width="2"/>
+          <path d="M16 27l7 7 13-15" fill="none" stroke="#155c3f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>Goed genoteerd.</h3>
+        <p>Een adviseur belt je op het nummer dat je doorgaf. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>© 2026 Verduurzamers — thuisbatterijen voor Vlaanderen</span>
+    <span><a href="https://verduurzamers.be">verduurzamers.be</a></span>
+  </div>
+</footer>
+
+<script>
+/* Progressive enhancement only — the page is fully usable without this. */
+document.documentElement.classList.add('js');
+
+/* Fade-up reveals on section enter (opacity/transform only) */
+(function(){
+  if(!('IntersectionObserver' in window)){
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+
+/* Callback form handling.
+   TODO: wire to GHL — replace the marked block with a POST to the
+   GoHighLevel inbound-webhook URL (BRIEF §9B). Until that URL exists,
+   we validate, warn in the console, and show the success state so the
+   form never silently does nothing during testing. */
+(function(){
+  document.querySelectorAll('.cb-form').forEach(function(form){
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      if(!form.checkValidity()){ form.reportValidity(); return; }
+
+      var data = Object.fromEntries(new FormData(form).entries());
+
+      /* TODO: wire to GHL — replace from here…
+      fetch('https://YOUR-GHL-INBOUND-WEBHOOK-URL', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(data)
+      }).then(function(){ form.closest('.form-card').classList.add('is-sent'); });
+      …to here, and delete the two lines below. */
+      console.warn('TODO: GHL webhook not wired — lead NOT sent:', data);
+      form.closest('.form-card').classList.add('is-sent');
+    });
+  });
+})();
+</script>
+</body>
+</html>
