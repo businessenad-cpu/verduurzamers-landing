@@ -226,12 +226,16 @@ p{margin:0}
 .cb-form{margin-top:1.1rem; display:grid; gap:.8rem}
 .field label{display:block; font-weight:600; font-size:.9rem; margin-bottom:.35rem}
 .field input[type="text"],
-.field input[type="tel"]{
+.field input[type="tel"],
+.field input[type="email"]{
   width:100%; padding:.7rem .95rem; font:inherit; color:var(--ink);
   background:#fff; border:1px solid #cfd8d2; border-radius:var(--radius-sm);
   transition:border-color .15s;
 }
 .field input:focus{border-color:var(--green-500); outline:none; box-shadow:0 0 0 3px rgba(31,122,84,.18)}
+/* telefoon + e-mail share a row on wider screens to keep the card above the fold */
+.field-row{display:grid; gap:.8rem}
+@media (min-width:480px){.field-row{grid-template-columns:1fr 1fr}}
 .radio-row{display:flex; gap:.6rem}
 .radio-pill{flex:1; position:relative}
 .radio-pill input{position:absolute; opacity:0; inset:0; cursor:pointer}
@@ -244,6 +248,14 @@ p{margin:0}
 .radio-pill input:checked + span{background:var(--green-700); border-color:var(--green-700); color:#fff}
 .radio-pill input:focus-visible + span{outline:3px solid rgba(240,165,0,.75); outline-offset:2px}
 .form-note{font-size:.83rem; color:var(--muted); text-align:center}
+.form-error{
+  font-size:.88rem; color:#a33b2e; background:#fdf0ee;
+  border:1px solid #f0cfc9; border-radius:var(--radius-sm);
+  padding:.7rem .9rem; text-align:center;
+}
+.form-error[hidden]{display:none}
+/* Honeypot — off-screen for humans, present for bots */
+.hp{position:absolute !important; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden}
 .form-success{
   display:none; text-align:center; padding:2rem .5rem;
 }
@@ -642,15 +654,29 @@ p{margin:0}
       <h2>Wij bellen jou terug</h2>
       <p class="form-sub">Gratis en vrijblijvend. Een adviseur rekent met jóuw verbruik — geen fantasiecijfers.</p>
 
-      <!-- TODO: wire to GHL — POST these fields to the GoHighLevel webhook URL (BRIEF §9B) -->
-      <form class="cb-form" method="post" novalidate>
+      <!-- Wired via FormSubmit.co → e-mail to Enad. The action attribute makes the
+           form deliver even without JS. TODO: swap ENDPOINT (in the script below) and
+           this action to the GoHighLevel inbound webhook once supplied (BRIEF §9B). -->
+      <form class="cb-form" method="post" action="https://formsubmit.co/businessenad@gmail.com" novalidate>
+        <input type="hidden" name="_subject" value="Nieuwe thuisbatterij-lead via de website">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_autoresponse" value="Bedankt! Je aanvraag is goed ontvangen. Een adviseur van Verduurzamers belt je binnenkort over je besparing. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.">
+        <!-- Honeypot: invisible to humans, bots fill it and get silently dropped -->
+        <div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
         <div class="field">
           <label for="naam">Naam</label>
           <input type="text" id="naam" name="naam" autocomplete="name" required>
         </div>
-        <div class="field">
-          <label for="telefoon">Telefoonnummer</label>
-          <input type="tel" id="telefoon" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ \(\)\.\/\-]{8,}" required>
+        <div class="field-row">
+          <div class="field">
+            <label for="telefoon">Telefoonnummer</label>
+            <input type="tel" id="telefoon" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ \(\)\.\/\-]{8,}" required>
+          </div>
+          <div class="field">
+            <label for="email">E-mailadres</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+          </div>
         </div>
         <div class="field">
           <span class="field-label" style="display:block;font-weight:600;font-size:.9rem;margin-bottom:.35rem">Heb je al zonnepanelen?</span>
@@ -664,6 +690,7 @@ p{margin:0}
           <input type="text" id="postcode" name="postcode" autocomplete="postal-code" inputmode="numeric" pattern="[1-9][0-9]{3}" maxlength="4" required>
         </div>
         <button type="submit" class="btn btn-cta btn-block">Bel mij terug over mijn besparing</button>
+        <p class="form-error" hidden>Oei — het versturen lukte even niet. Probeer het zo nog eens, je gegevens staan er nog. Blijft het haperen? Mail ons dan rechtstreeks.</p>
         <p class="form-note">Geen verkooppraatje aan de deur. Eén telefoontje, met cijfers.</p>
       </form>
 
@@ -673,7 +700,7 @@ p{margin:0}
           <path d="M16 27l7 7 13-15" fill="none" stroke="#155c3f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <h3>Goed genoteerd.</h3>
-        <p>Een adviseur belt je op het nummer dat je doorgaf. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.</p>
+        <p>Bedankt — check je inbox voor de bevestiging. Een adviseur belt je op het nummer dat je doorgaf. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.</p>
       </div>
     </div>
     </div><!-- /.hero-side -->
@@ -923,15 +950,27 @@ p{margin:0}
       <h2>Wij bellen jou terug</h2>
       <p class="form-sub">Gratis en vrijblijvend. Een adviseur rekent met jóuw verbruik — geen fantasiecijfers.</p>
 
-      <!-- TODO: wire to GHL — POST these fields to the GoHighLevel webhook URL (BRIEF §9B) -->
-      <form class="cb-form" method="post" novalidate>
+      <!-- Wired via FormSubmit.co → e-mail to Enad. Works without JS via the action.
+           TODO: swap to the GoHighLevel inbound webhook once supplied (BRIEF §9B). -->
+      <form class="cb-form" method="post" action="https://formsubmit.co/businessenad@gmail.com" novalidate>
+        <input type="hidden" name="_subject" value="Nieuwe thuisbatterij-lead via de website">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_autoresponse" value="Bedankt! Je aanvraag is goed ontvangen. Een adviseur van Verduurzamers belt je binnenkort over je besparing. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.">
+        <div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
         <div class="field">
           <label for="naam2">Naam</label>
           <input type="text" id="naam2" name="naam" autocomplete="name" required>
         </div>
-        <div class="field">
-          <label for="telefoon2">Telefoonnummer</label>
-          <input type="tel" id="telefoon2" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ \(\)\.\/\-]{8,}" required>
+        <div class="field-row">
+          <div class="field">
+            <label for="telefoon2">Telefoonnummer</label>
+            <input type="tel" id="telefoon2" name="telefoon" autocomplete="tel" inputmode="tel" pattern="[0-9+ \(\)\.\/\-]{8,}" required>
+          </div>
+          <div class="field">
+            <label for="email2">E-mailadres</label>
+            <input type="email" id="email2" name="email" autocomplete="email" required>
+          </div>
         </div>
         <div class="field">
           <span class="field-label" style="display:block;font-weight:600;font-size:.9rem;margin-bottom:.35rem">Heb je al zonnepanelen?</span>
@@ -945,6 +984,7 @@ p{margin:0}
           <input type="text" id="postcode2" name="postcode" autocomplete="postal-code" inputmode="numeric" pattern="[1-9][0-9]{3}" maxlength="4" required>
         </div>
         <button type="submit" class="btn btn-cta btn-block">Bel mij terug over mijn besparing</button>
+        <p class="form-error" hidden>Oei — het versturen lukte even niet. Probeer het zo nog eens, je gegevens staan er nog. Blijft het haperen? Mail ons dan rechtstreeks.</p>
         <p class="form-note">Geen verkooppraatje aan de deur. Eén telefoontje, met cijfers.</p>
       </form>
 
@@ -954,7 +994,7 @@ p{margin:0}
           <path d="M16 27l7 7 13-15" fill="none" stroke="#155c3f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <h3>Goed genoteerd.</h3>
-        <p>Een adviseur belt je op het nummer dat je doorgaf. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.</p>
+        <p>Bedankt — check je inbox voor de bevestiging. Een adviseur belt je op het nummer dat je doorgaf. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.</p>
       </div>
     </div>
   </div>
@@ -1071,28 +1111,56 @@ document.documentElement.classList.add('js');
   }
 })();
 
-/* Callback form handling.
-   TODO: wire to GHL — replace the marked block with a POST to the
-   GoHighLevel inbound-webhook URL (BRIEF §9B). Until that URL exists,
-   we validate, warn in the console, and show the success state so the
-   form never silently does nothing during testing. */
+/* Callback form handling — delivers the lead by e-mail via FormSubmit.co.
+   The <form action> is the no-JS fallback; this handler upgrades it to an
+   in-page submit with a success state and graceful failure.
+   TODO: when the GoHighLevel inbound-webhook URL arrives (BRIEF §9B),
+   change ENDPOINT to that URL and remove the FormSubmit-specific _fields. */
 (function(){
+  var ENDPOINT = 'https://formsubmit.co/ajax/businessenad@gmail.com';
+
   document.querySelectorAll('.cb-form').forEach(function(form){
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
       if(!form.checkValidity()){ form.reportValidity(); return; }
 
+      var card = form.closest('.form-card');
+      var btn  = form.querySelector('button[type=submit]');
+      var err  = form.querySelector('.form-error');
       var data = Object.fromEntries(new FormData(form).entries());
 
-      /* TODO: wire to GHL — replace from here…
-      fetch('https://YOUR-GHL-INBOUND-WEBHOOK-URL', {
+      /* Honeypot filled = bot. Show the success state but send nothing. */
+      if(data._honey){ card.classList.add('is-sent'); return; }
+      delete data._honey;
+      data._subject = 'Nieuwe thuisbatterij-lead: ' + data.naam;
+
+      err.hidden = true;
+      btn.disabled = true;
+      var label = btn.textContent;
+      btn.textContent = 'Versturen…';
+
+      /* Abort after 15s so the button can never hang on "Versturen…" */
+      var ctrl = ('AbortController' in window) ? new AbortController() : null;
+      var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 15000) : null;
+
+      fetch(ENDPOINT, {
         method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(data)
-      }).then(function(){ form.closest('.form-card').classList.add('is-sent'); });
-      …to here, and delete the two lines below. */
-      console.warn('TODO: GHL webhook not wired — lead NOT sent:', data);
-      form.closest('.form-card').classList.add('is-sent');
+        headers:{'Content-Type':'application/json', 'Accept':'application/json'},
+        body:JSON.stringify(data),
+        signal: ctrl ? ctrl.signal : undefined
+      })
+      .then(function(r){ if(!r.ok){ throw new Error('HTTP ' + r.status); } return r.json(); })
+      .then(function(j){
+        /* FormSubmit can answer 200 with success:"false" (e.g. form not yet
+           activated) — treat that as a failure, never as a delivered lead. */
+        if(!(j && (j.success === true || j.success === 'true'))){ throw new Error('rejected'); }
+        card.classList.add('is-sent');
+      })
+      .catch(function(){ err.hidden = false; })
+      .finally(function(){
+        if(timer){ clearTimeout(timer); }
+        btn.disabled = false; btn.textContent = label;
+      });
     });
   });
 })();
