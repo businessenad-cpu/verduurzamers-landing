@@ -25,30 +25,45 @@
 
 :root{
   /* ============================================================
-     PALETTE — locked. ONE primary (Dennengroen), ONE accent (Zonnegoud).
-     The greens are a single-hue tint ladder, not separate colours.
-     Gold is reserved for CTA + guarantee/offer moments only.
+     THE PALETTE — FIVE colours. Nothing else is a source colour.
+     Every green shade, gold shade, text tone, line and wash below
+     is DERIVED from these five via color-mix(). Change one of the
+     five and the whole page re-tunes in harmony.
+        Ink    #16241D  · text
+        Forest #0E4B32  · primary / dark sections
+        Gold   #F0A500  · single accent (CTA + guarantee only)
+        Bone   #FAF8F3  · warm paper (replaces cold white)
+        Sage   #DDE6DE  · lines & soft washes
      ============================================================ */
-  --green-950:#062718;   /* deepest — stat band / footer            */
-  --green-900:#08301f;
-  --green-800:#0b3d29;
-  --green-700:#0E4B32;   /* ◆ PRIMARY                               */
-  --green-600:#155c3f;
-  --green-500:#1f7a54;   /* primary, lightened — eyebrows/icons     */
-  --green-100:#dcebe2;
-  --green-50:#eef5f0;    /* primary wash — soft fills               */
+  --c-ink:#16241D;
+  --c-forest:#0E4B32;
+  --c-gold:#F0A500;
+  --c-bone:#FAF8F3;
+  --c-sage:#DDE6DE;
 
-  --gold-600:#d18f00;
-  --gold-500:#F0A500;    /* ◆ ACCENT — CTA + guarantee only         */
-  --gold-400:#f7b62a;
-  --gold-50:#fdf4e0;
+  /* — derived greens (forest tinted toward ink / bone) — */
+  --green-950:color-mix(in srgb, var(--c-forest) 30%, var(--c-ink));   /* deepest — stat band / footer */
+  --green-900:color-mix(in srgb, var(--c-forest) 52%, var(--c-ink));
+  --green-800:color-mix(in srgb, var(--c-forest) 74%, var(--c-ink));
+  --green-700:var(--c-forest);                                          /* ◆ PRIMARY */
+  --green-600:color-mix(in srgb, var(--c-forest) 88%, var(--c-bone));
+  --green-500:color-mix(in srgb, var(--c-forest) 66%, var(--c-sage));   /* muted — eyebrows/icons */
+  --green-100:color-mix(in srgb, var(--c-forest) 16%, var(--c-bone));
+  --green-50 :color-mix(in srgb, var(--c-forest) 7%,  var(--c-bone));   /* soft fills */
 
-  --ink:#152019;
-  --ink-soft:#3d4a43;
-  --muted:#67766e;
-  --line:#e3e8e4;
-  --paper:#ffffff;
-  --paper-2:#f6f8f6;
+  /* — derived golds (accent only) — */
+  --gold-600:color-mix(in srgb, var(--c-gold) 84%, var(--c-ink));
+  --gold-500:var(--c-gold);                                             /* ◆ ACCENT */
+  --gold-400:color-mix(in srgb, var(--c-gold) 76%, #fff);
+  --gold-50 :color-mix(in srgb, var(--c-gold) 14%, var(--c-bone));
+
+  /* — derived neutrals — */
+  --ink:var(--c-ink);
+  --ink-soft:color-mix(in srgb, var(--c-ink) 70%, var(--c-bone));
+  --muted:color-mix(in srgb, var(--c-ink) 48%, var(--c-bone));
+  --line:var(--c-sage);
+  --paper:var(--c-bone);
+  --paper-2:color-mix(in srgb, var(--c-forest) 5%, var(--c-bone));
 
   /* ============================================================
      TYPE SCALE — modular, base 1rem, ratio 1.25 (major third).
@@ -63,11 +78,12 @@
   --step-4  :2.441rem;
   --step-5  :3.052rem;
   --step-6  :3.815rem;
-  /* fluid display sizes, clamped between two scale steps */
-  --f-h1:clamp(2.441rem, 1.55rem + 4.4vw, 3.815rem);  /* step 4 → 6 */
-  --f-h2:clamp(1.953rem, 1.42rem + 2.4vw, 2.441rem);  /* step 3 → 4 */
-  --f-h3:var(--step-1);
-  --f-lead:clamp(1.125rem, 1.05rem + .35vw, 1.25rem);
+  /* fluid display sizes — wider jump H1→H2→body for a confident,
+     premium hierarchy (display dominates; mids stay restrained) */
+  --f-h1:clamp(2.6rem, 1.25rem + 5.4vw, 4.6rem);      /* hero — commands the page */
+  --f-h2:clamp(1.85rem, 1.35rem + 2.1vw, 2.6rem);     /* section heads            */
+  --f-h3:var(--step-1);                                /* card / row titles        */
+  --f-lead:clamp(1.1rem, 1.02rem + .38vw, 1.28rem);   /* standfirsts              */
 
   /* ============================================================
      SPACING — strict 8px grid (4px half-step for optical nudges).
@@ -83,8 +99,9 @@
   --s-8:4rem;     /* 64 */
   --s-9:6rem;     /* 96 */
   --s-10:8rem;    /*128 */
-  --section-y:clamp(3rem, 6vw, 6rem);   /* 48 → 96, both on-grid    */
-  --content:44rem;                       /* max measure for prose    */
+  --section-y:clamp(4.5rem, 9vw, 8rem);  /* 72 → 128 — generous air   */
+  --content:42rem;                       /* tighter measure = calmer  */
+  --head-gap:clamp(var(--s-7), 6vw, var(--s-9));  /* head → content gap */
 
   --radius:18px;
   --radius-sm:12px;
@@ -311,11 +328,11 @@ p{margin:0}
    HERKENBAAR — the problem, mirrored back
    ============================================================== */
 .problem{background:var(--paper-2)}
-.problem-grid{display:grid; gap:var(--s-4); margin-top:var(--s-7)}
+.problem-grid{display:grid; gap:var(--s-5); margin-top:var(--head-gap)}
 @media (min-width:820px){.problem-grid{grid-template-columns:repeat(3,1fr)}}
 .problem-card{
   background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
-  padding:var(--s-6); box-shadow:var(--shadow-sm);
+  padding:var(--s-7); box-shadow:var(--shadow-sm);
   transition:transform .2s ease, box-shadow .2s ease;
 }
 .problem-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-md)}
@@ -350,7 +367,7 @@ p{margin:0}
    oversized gold index and a mono from→to tag. Replaces the old
    three-identical-cards grid so this moment reads as authored, not templated.
    ============================================================== */
-.flow-list{list-style:none; margin:var(--s-7) 0 0; padding:0; border-top:1px solid var(--line); counter-reset:flow}
+.flow-list{list-style:none; margin:var(--head-gap) 0 0; padding:0; border-top:1px solid var(--line); counter-reset:flow}
 .flow-row{
   display:grid; grid-template-columns:auto 1fr; align-items:start;
   gap:var(--s-4) var(--s-5); padding:var(--s-6) 0; border-bottom:1px solid var(--line);
@@ -439,7 +456,7 @@ p{margin:0}
 /* ==============================================================
    REAL INSTALLATIONS
    ============================================================== */
-.installs-grid{display:grid; gap:var(--s-4); margin-top:var(--s-7)}
+.installs-grid{display:grid; gap:var(--s-5); margin-top:var(--head-gap)}
 @media (min-width:760px){.installs-grid{grid-template-columns:repeat(3,1fr)}}
 .install{
   border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);
@@ -457,7 +474,7 @@ p{margin:0}
    FAQ
    ============================================================== */
 .faq{background:var(--paper-2)}
-.faq-list{margin-top:var(--s-7); max-width:52rem; display:grid; gap:var(--s-3)}
+.faq-list{margin-top:var(--head-gap); max-width:52rem; display:grid; gap:var(--s-3)}
 .faq-item{
   background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-sm);
 }
