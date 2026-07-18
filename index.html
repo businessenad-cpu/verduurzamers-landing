@@ -723,6 +723,8 @@ p{margin:0}
            this action to the GoHighLevel inbound webhook once supplied (BRIEF §9B). -->
       <form class="cb-form" method="post" action="https://formsubmit.co/businessenad@gmail.com" novalidate>
         <input type="hidden" name="_subject" value="Nieuwe thuisbatterij-lead via de website">
+        <!-- No-JS fallback: FormSubmit redirects here after a plain POST (needs absolute URL) -->
+        <input type="hidden" name="_next" value="https://businessenad-cpu.github.io/verduurzamers-landing/bedankt.html">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_autoresponse" value="Bedankt! Je aanvraag is goed ontvangen. Een adviseur van Verduurzamers belt je binnenkort over je besparing. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.">
@@ -1018,6 +1020,8 @@ p{margin:0}
            TODO: swap to the GoHighLevel inbound webhook once supplied (BRIEF §9B). -->
       <form class="cb-form" method="post" action="https://formsubmit.co/businessenad@gmail.com" novalidate>
         <input type="hidden" name="_subject" value="Nieuwe thuisbatterij-lead via de website">
+        <!-- No-JS fallback: FormSubmit redirects here after a plain POST (needs absolute URL) -->
+        <input type="hidden" name="_next" value="https://businessenad-cpu.github.io/verduurzamers-landing/bedankt.html">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_autoresponse" value="Bedankt! Je aanvraag is goed ontvangen. Een adviseur van Verduurzamers belt je binnenkort over je besparing. Hou je laatste energiefactuur in de buurt — dan rekenen we meteen met echte cijfers.">
@@ -1193,9 +1197,10 @@ document.documentElement.classList.add('js');
       var err  = form.querySelector('.form-error');
       var data = Object.fromEntries(new FormData(form).entries());
 
-      /* Honeypot filled = bot. Show the success state but send nothing. */
-      if(data._honey){ card.classList.add('is-sent'); return; }
+      /* Honeypot filled = bot. Pretend success (redirect) but send nothing. */
+      if(data._honey){ window.location.href = 'bedankt.html'; return; }
       delete data._honey;
+      delete data._next; /* _next is for the no-JS fallback only; AJAX redirects itself */
       data._subject = 'Nieuwe thuisbatterij-lead: ' + data.naam;
 
       err.hidden = true;
@@ -1218,7 +1223,8 @@ document.documentElement.classList.add('js');
         /* FormSubmit can answer 200 with success:"false" (e.g. form not yet
            activated) — treat that as a failure, never as a delivered lead. */
         if(!(j && (j.success === true || j.success === 'true'))){ throw new Error('rejected'); }
-        card.classList.add('is-sent');
+        /* Lead delivered → confirmation page (tracking events fire there) */
+        window.location.href = 'bedankt.html';
       })
       .catch(function(){ err.hidden = false; })
       .finally(function(){

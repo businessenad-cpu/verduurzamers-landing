@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bedankt — Verduurzamers</title>
+<meta name="description" content="Je aanvraag is goed ontvangen. Een adviseur van Verduurzamers belt je binnen 24 uur.">
+<!-- Confirmation page: never index this (skews ads data + useless in search) -->
+<meta name="robots" content="noindex">
+
+<!-- ==============================================================
+     TODO TRACKING — Meta Pixel: PageView + Lead event.
+     Vul het Pixel ID in en haal de commentaartekens weg.
+     NIET activeren met een verzonnen ID.
+
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'JOUW_PIXEL_ID_HIER');
+fbq('track', 'PageView');
+fbq('track', 'Lead');
+</script>
+============================================================== -->
+
+<!-- ==============================================================
+     TODO TRACKING — Google Ads conversion tag.
+     Vul AW-CONVERSION_ID en CONVERSION_LABEL in en haal de
+     commentaartekens weg. NIET activeren met verzonnen ID's.
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-CONVERSION_ID"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'AW-CONVERSION_ID');
+gtag('event', 'conversion', {'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL'});
+</script>
+============================================================== -->
+
+<!-- Google Fonts — the only external resource (BRIEF §12) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ==============================================================
+   VERDUURZAMERS — bedanktpagina (bevestiging, geen verkoop)
+   Same 5-colour token system as index.html. Calmer hero.
+   Motion: transforms + opacity only, pure CSS (no JS needed).
+   ============================================================== */
+
+:root{
+  /* — the five source colours (identical to index.html) — */
+  --c-ink:#16241D;
+  --c-forest:#0E4B32;
+  --c-gold:#F0A500;
+  --c-bone:#FAF8F3;
+  --c-sage:#DDE6DE;
+
+  --green-950:color-mix(in srgb, var(--c-forest) 30%, var(--c-ink));
+  --green-900:color-mix(in srgb, var(--c-forest) 52%, var(--c-ink));
+  --green-800:color-mix(in srgb, var(--c-forest) 74%, var(--c-ink));
+  --green-700:var(--c-forest);
+  --green-500:color-mix(in srgb, var(--c-forest) 66%, var(--c-sage));
+  --green-100:color-mix(in srgb, var(--c-forest) 16%, var(--c-bone));
+  --green-50 :color-mix(in srgb, var(--c-forest) 7%,  var(--c-bone));
+
+  --gold-600:color-mix(in srgb, var(--c-gold) 84%, var(--c-ink));
+  --gold-500:var(--c-gold);
+  --gold-400:color-mix(in srgb, var(--c-gold) 76%, #fff);
+
+  --ink:var(--c-ink);
+  --ink-soft:color-mix(in srgb, var(--c-ink) 70%, var(--c-bone));
+  --muted:color-mix(in srgb, var(--c-ink) 48%, var(--c-bone));
+  --line:var(--c-sage);
+  --paper:var(--c-bone);
+
+  --step-000:0.64rem;
+  --step-00 :0.8rem;
+  --step-0  :1rem;
+  --step-1  :1.25rem;
+  --f-h1:clamp(2rem, 1.2rem + 3.6vw, 3.4rem);
+  --f-lead:clamp(1.05rem, 1rem + .3vw, 1.2rem);
+
+  --s-2:0.5rem; --s-3:0.75rem; --s-4:1rem; --s-5:1.5rem;
+  --s-6:2rem; --s-7:3rem; --s-8:4rem;
+
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow-md:0 8px 30px rgba(8,48,31,.10), 0 2px 8px rgba(8,48,31,.06);
+  --maxw:1120px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:"Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+  font-size:clamp(16px, 1rem + .1vw, 17.5px);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+h1,h2,h3{font-family:"Bricolage Grotesque", sans-serif; line-height:1.06; letter-spacing:-.02em; margin:0; color:var(--ink)}
+p{margin:0}
+:focus-visible{outline:3px solid rgba(240,165,0,.75); outline-offset:2px; border-radius:4px}
+.wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(var(--s-4), 4vw, var(--s-6))}
+.eyebrow{
+  font-family:"IBM Plex Mono", monospace; font-weight:600;
+  font-size:var(--step-000); letter-spacing:.16em; text-transform:uppercase;
+}
+
+/* ---------- top bar: brand only, links back to the landing page ---------- */
+.topbar{border-bottom:1px solid var(--line); background:var(--paper)}
+.topbar-inner{display:flex; align-items:center; height:64px}
+.brand{display:flex; align-items:center; gap:.55rem; font-family:"Bricolage Grotesque",sans-serif; font-weight:800; font-size:1.12rem; letter-spacing:-.02em; text-decoration:none; color:var(--green-700)}
+.brand svg{flex:0 0 auto}
+
+/* ---------- confirmation hero: same mesh family, calmer ---------- */
+.confirm{
+  color:#fff; text-align:center; position:relative; overflow:hidden;
+  background:
+    radial-gradient(46rem 30rem at 14% -10%, rgba(31,122,84,.55), transparent 62%),
+    radial-gradient(40rem 26rem at 92% 112%, rgba(240,165,0,.10), transparent 58%),
+    linear-gradient(160deg, var(--green-800), var(--green-700) 55%, var(--green-900));
+}
+.confirm-inner{padding-block:clamp(var(--s-8), 9vw, 6.5rem); position:relative; z-index:1}
+/* one slow drifting shape — calm, transform-only */
+.confirm .blob{
+  position:absolute; width:34rem; height:34rem; border-radius:50%; pointer-events:none;
+  top:-14rem; right:-10rem; will-change:transform;
+  background:radial-gradient(closest-side, rgba(247,182,42,.16), transparent 70%);
+  animation:drift 30s ease-in-out infinite alternate;
+}
+@keyframes drift{from{transform:translate(0,0)} to{transform:translate(-3rem,2.5rem)}}
+
+/* draw-on checkmark — base state is DRAWN (works without animation support) */
+.bigcheck{width:96px; height:96px; margin-inline:auto}
+.bigcheck .ring{fill:rgba(255,255,255,.10); stroke:rgba(255,255,255,.45); stroke-width:2}
+.bigcheck .tick{
+  fill:none; stroke:var(--gold-500); stroke-width:7;
+  stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:75; stroke-dashoffset:0;
+  animation:drawtick .9s ease-out .35s backwards;
+}
+@keyframes drawtick{from{stroke-dashoffset:75}to{stroke-dashoffset:0}}
+.confirm h1{color:#fff; font-size:var(--f-h1); margin-top:var(--s-5); max-width:18ch; margin-inline:auto}
+.confirm .confirm-sub{margin-top:var(--s-4); color:rgba(255,255,255,.85); font-size:var(--f-lead); max-width:34rem; margin-inline:auto}
+
+/* staggered fade-up on load — pure CSS, opacity/transform only */
+.rise{animation:rise .7s ease backwards}
+.rise-1{animation-delay:.15s}
+.rise-2{animation-delay:.3s}
+.rise-3{animation-delay:.45s}
+.rise-4{animation-delay:.6s}
+@keyframes rise{from{opacity:0; transform:translateY(16px)}to{opacity:1; transform:none}}
+
+/* ---------- what happens now: 3-step timeline ---------- */
+.steps{padding-block:clamp(var(--s-7), 8vw, var(--s-8))}
+.steps .eyebrow{color:var(--green-500)}
+.steps h2{font-size:clamp(1.6rem, 1.2rem + 1.8vw, 2.2rem); margin-top:var(--s-3)}
+.timeline{margin-top:clamp(var(--s-6), 5vw, var(--s-7)); max-width:44rem; display:grid; gap:0}
+.tstep{display:grid; grid-template-columns:56px 1fr; gap:var(--s-4); position:relative; padding-bottom:var(--s-6)}
+.tstep:last-child{padding-bottom:0}
+/* connecting line between the mono badges */
+.tstep::before{
+  content:""; position:absolute; left:27px; top:56px; bottom:6px;
+  width:2px; background:var(--line);
+}
+.tstep:last-child::before{display:none}
+.tnum{
+  width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:var(--green-50); border:1.5px solid var(--green-100);
+  font-family:"IBM Plex Mono", monospace; font-weight:600; font-size:.95rem; color:var(--green-700);
+}
+.tstep h3{font-size:var(--step-1); padding-top:var(--s-3)}
+.tstep p{margin-top:var(--s-2); color:var(--ink-soft); max-width:36rem}
+.tstep .tmeta{
+  display:inline-block; margin-top:var(--s-3);
+  font-family:"IBM Plex Mono", monospace; font-weight:500; font-size:var(--step-000);
+  letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+}
+
+/* ---------- calm guarantee line ---------- */
+.reassure{
+  border-block:1px solid var(--line);
+  background:var(--green-50);
+}
+.reassure-inner{padding-block:var(--s-6); display:flex; gap:var(--s-4); align-items:flex-start; max-width:46rem}
+.reassure svg{flex:0 0 auto; margin-top:.2rem}
+.reassure p{color:var(--ink-soft)}
+.reassure strong{color:var(--ink)}
+
+/* ---------- can't wait: phone block ---------- */
+.callus{padding-block:clamp(var(--s-7), 8vw, var(--s-8))}
+.callus-card{
+  max-width:44rem; background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow-md); padding:clamp(var(--s-5), 4vw, var(--s-6));
+  display:flex; flex-wrap:wrap; align-items:center; gap:var(--s-4) var(--s-6);
+}
+.callus-card h2{font-size:var(--step-1)}
+.callus-card p{margin-top:var(--s-2); color:var(--ink-soft); font-size:var(--step-00)}
+.tel-link{
+  display:inline-flex; align-items:center; gap:.55rem; margin-left:auto;
+  font-family:"IBM Plex Mono", monospace; font-weight:600; font-size:1.05rem;
+  color:var(--green-700); text-decoration:none;
+  padding:var(--s-3) var(--s-5); border:1.5px solid var(--green-100);
+  border-radius:999px; background:var(--green-50);
+  transition:transform .18s ease, background .18s ease;
+}
+.tel-link:hover{transform:translateY(-2px); background:var(--green-100)}
+@media (max-width:560px){.tel-link{margin-left:0; width:100%; justify-content:center}}
+
+/* ---------- footer (same as landing) ---------- */
+.footer{background:var(--green-950); color:rgba(255,255,255,.6); font-size:.86rem}
+.footer-inner{display:flex; flex-wrap:wrap; gap:.6rem 1.6rem; justify-content:space-between; padding-block:1.6rem}
+.footer a{color:rgba(255,255,255,.8); text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+@media (prefers-reduced-motion: reduce){
+  .confirm .blob{animation:none}
+  .bigcheck .tick{animation:none}
+  .rise{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ TOP BAR ============================ -->
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="index.html" aria-label="Verduurzamers — terug naar de startpagina">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="3" y="6" width="16" height="14" rx="3" fill="#0E4B32"/>
+        <rect x="19" y="10" width="3" height="6" rx="1.5" fill="#0E4B32"/>
+        <path d="M12.2 8.5 8.8 13.6h2.6l-1.4 3.9 4.2-5.3h-2.7l1.9-3.7h-1.2z" fill="#F0A500"/>
+      </svg>
+      Verduurzamers
+    </a>
+  </div>
+</div>
+
+<!-- ============================ CONFIRMATION ============================ -->
+<header class="confirm">
+  <div class="blob" aria-hidden="true"></div>
+  <div class="wrap confirm-inner">
+    <svg class="bigcheck rise" viewBox="0 0 96 96" aria-hidden="true">
+      <circle class="ring" cx="48" cy="48" r="44"/>
+      <path class="tick" d="M30 50l13 13 24-30"/>
+    </svg>
+    <h1 class="rise rise-1">Gelukt — we hebben je aanvraag ontvangen.</h1>
+    <p class="confirm-sub rise rise-2">Je hoeft verder niets te doen. Hieronder zie je exact wat er nu gebeurt.</p>
+  </div>
+</header>
+
+<!-- ============================ WHAT HAPPENS NOW ============================ -->
+<section class="steps" aria-label="Wat gebeurt er nu">
+  <div class="wrap">
+    <p class="eyebrow rise rise-2">Wat gebeurt er nu</p>
+    <h2 class="rise rise-2">Drie stappen, geen verrassingen</h2>
+
+    <div class="timeline">
+      <div class="tstep rise rise-2">
+        <div class="tnum">01</div>
+        <div>
+          <h3>We bellen je binnen 24 uur</h3>
+          <p>Een adviseur belt je op het nummer dat je doorgaf — met een gewoon <strong>Belgisch nummer</strong>, geen anoniem of buitenlands nummer. Zo weet je dat wij het zijn als de telefoon gaat.</p>
+          <span class="tmeta">Op werkdagen · Belgisch nummer</span>
+        </div>
+      </div>
+      <div class="tstep rise rise-3">
+        <div class="tnum">02</div>
+        <div>
+          <h3>We bekijken samen je verbruik en je panelen</h3>
+          <p>Zo'n tien minuten, volledig vrijblijvend. Leg je laatste energiefactuur klaar — dan rekenen we meteen met jouw echte cijfers, niet met een gemiddelde.</p>
+          <span class="tmeta">±10 minuten · vrijblijvend</span>
+        </div>
+      </div>
+      <div class="tstep rise rise-4">
+        <div class="tnum">03</div>
+        <div>
+          <h3>Je krijgt een voorstel op maat</h3>
+          <p>Met de terugverdientijd zwart op wit, berekend op jouw verbruik. Geen fantasiecijfers — je kan alles rustig nalezen voor je iets beslist.</p>
+          <span class="tmeta">Terugverdientijd zwart op wit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CALM REASSURANCE ============================ -->
+<section class="reassure" aria-label="Je garanties">
+  <div class="wrap reassure-inner">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="rgba(240,165,0,.18)"/><path d="M6.5 11.5l3 3 6-7" stroke="#F0A500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <p>Voor alle duidelijkheid: de <strong>eerste 5 kWh krijg je gratis</strong>, en verdien je de batterij niet terug binnen 5 jaar, dan <strong>betalen wij het verschil</strong>. Beide staan straks ook zwart op wit in je voorstel.</p>
+  </div>
+</section>
+
+<!-- ============================ CAN'T WAIT ============================ -->
+<section class="callus" aria-label="Zelf bellen">
+  <div class="wrap">
+    <div class="callus-card">
+      <div>
+        <h2>Kan je niet wachten?</h2>
+        <p>Bel ons gerust zelf — je komt meteen bij een adviseur terecht.</p>
+      </div>
+      <!-- TODO: echt nummer invullen — vervang de href ÉN de zichtbare tekst.
+           Geen echt Verduurzamers-nummer gevonden in het project; niets verzonnen. -->
+      <a class="tel-link" href="tel:+320000000000">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3.6 2h3l1.5 3.8-1.9 1.4a11.5 11.5 0 0 0 4.6 4.6l1.4-1.9L16 11.4v3c0 .9-.7 1.6-1.6 1.6C7.9 16 2 10.1 2 3.6 2 2.7 2.7 2 3.6 2z" stroke="#0E4B32" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        TODO: echt nummer
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>© 2026 Verduurzamers — thuisbatterijen voor Vlaanderen</span>
+    <span><a href="https://verduurzamers.be">verduurzamers.be</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
