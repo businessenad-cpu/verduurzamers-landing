@@ -151,6 +151,16 @@ p{margin:0}
 @keyframes drawtick{from{stroke-dashoffset:75}to{stroke-dashoffset:0}}
 .confirm h1{color:#fff; font-size:var(--f-h1); margin-top:var(--s-5); max-width:18ch; margin-inline:auto}
 .confirm .confirm-sub{margin-top:var(--s-4); color:rgba(255,255,255,.85); font-size:var(--f-lead); max-width:34rem; margin-inline:auto}
+/* regio-chip — alleen zichtbaar als de gemeente via ?g= wordt meegegeven */
+.confirm-regio{margin-top:var(--s-5)}
+.confirm-regio[hidden]{display:none}
+.confirm-regio span{
+  display:inline-block; font-family:"IBM Plex Mono", monospace; font-weight:600;
+  font-size:var(--step-000); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold-400); background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.22); border-radius:999px;
+  padding:var(--s-2) var(--s-4);
+}
 
 /* staggered fade-up on load — pure CSS, opacity/transform only */
 .rise{animation:rise .7s ease backwards}
@@ -255,6 +265,8 @@ p{margin:0}
     </svg>
     <h1 class="rise rise-1">Gelukt — we hebben je aanvraag ontvangen.</h1>
     <p class="confirm-sub rise rise-2">Je hoeft verder niets te doen. Hieronder zie je exact wat er nu gebeurt.</p>
+    <!-- Gemeente uit de postcode, meegegeven door het formulier (?g=…). Zonder JS of parameter: onzichtbaar. -->
+    <p class="confirm-regio rise rise-2" hidden><span>Aanvraag voor regio <strong id="regio-naam"></strong></span></p>
   </div>
 </header>
 
@@ -327,5 +339,19 @@ p{margin:0}
   </div>
 </footer>
 
+<script>
+/* Toon de gemeente die het formulier meegaf (?g=Sint-Niklaas).
+   textContent + strikte whitelist = veilig; ontbreekt de parameter, dan blijft de chip weg. */
+(function(){
+  try{
+    var g = new URLSearchParams(window.location.search).get('g');
+    if(!g) return;
+    g = g.trim().slice(0, 40);
+    if(!/^[A-Za-zÀ-ſ'’. -]{2,40}$/.test(g)) return;
+    document.getElementById('regio-naam').textContent = g;
+    document.querySelector('.confirm-regio').hidden = false;
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
